@@ -1,7 +1,7 @@
 import sys
 import os
 if os.name == 'nt':
-    import msvcrt
+    import keyboard
     import winsound
 else:
     from pynput.keyboard import Listener
@@ -22,10 +22,11 @@ def play(fileLocation):
 def waitForKey(keyToWaitFor):
     if os.name == 'nt':
         while True:
-            if msvcrt.kbhit():
-                key = str(msvcrt.getch(), encoding="utf-8")
-                if key.lower() == keyToWaitFor:
+            try:
+                if keyboard.is_pressed(keyToWaitFor.lower()) or keyboard.is_pressed(keyToWaitFor.upper()):
                     return True
+            except:
+                return False
     else:
         def on_press(key):
             if str(key).replace("\'", "").lower() == keyToWaitFor:
